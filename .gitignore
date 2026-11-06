@@ -1,0 +1,9 @@
+.venv/
+.venv-models/
+vendor/
+node_modules/
+data/
+__pycache__/
+.pytest_cache/
+*.log
+.cache/

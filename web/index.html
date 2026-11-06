@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Architecture Splat Lab</title><link rel="stylesheet" href="/style.css">
+<script type="importmap">{"imports":{"three":"/deps/three/build/three.module.js","three/addons/":"/deps/three/examples/jsm/","@sparkjsdev/spark":"/deps/@sparkjsdev/spark/dist/spark.module.js"}}</script></head>
+<body><aside><div class="brand">A / S <span>ARCHITECTURE SPLAT LAB</span></div>
+<h1>One building.<br>Three perspectives.</h1><p class="intro">Compare geometry from the same photograph, with synchronized cameras.</p>
+<div id="hardware" class="badge">Checking GPU...</div>
+<form id="upload"><label class="drop">SOURCE PHOTOGRAPH<input id="file" type="file" accept="image/jpeg,image/png,image/webp"><small>JPEG / PNG / WebP &middot; up to 25 MB</small></label><img id="preview" hidden alt="Source photograph">
+<fieldset><legend>Reconstruction models</legend><div id="models"></div></fieldset>
+<label class="field">Lens calibration <select id="lens"><option value="">Automatic / EXIF</option><option value="18">18 mm - ultra wide</option><option value="24">24 mm - wide</option><option value="30">30 mm - default fallback</option><option value="35">35 mm</option><option value="50">50 mm</option><option value="85">85 mm</option></select></label>
+<small class="note">35mm-equivalent focal length for SHARP and InfiniSplat. ZipSplat predicts its own camera. A missing EXIF lens falls back to 30 mm.</small>
+<button id="generate" type="submit">Run selected models</button></form>
+<p id="status" role="status">Choose a photo, or reuse a previous exploration below.</p>
+<h2>Previous explorations</h2><div id="jobs"></div>
+<p class="note">Single-photo geometry remains inferred. Extra views are needed to verify hidden walls, window recesses, and building dimensions.</p></aside>
+<main><header><span>MODEL COMPARISON</span><span id="summary">Same source / matched motion</span></header>
+<section class="toolbar"><button id="reset">Source view</button><button id="motion" aria-pressed="false">Animate parallax</button><label>Inspect <select id="display"><option value="all">All models</option><option value="sharp">SHARP</option><option value="infinisplat">InfiniSplat</option><option value="zipsplat">ZipSplat</option></select></label><label><input type="checkbox" id="free"> Free orbit</label><label>Background <input type="color" id="background" value="#11191b"></label></section>
+<section class="sliders"><label>Lateral <input id="lateral" type="range" min="-20" max="20" value="0" step="0.5"><output id="lateral-value">0%</output></label><label>Vertical <input id="vertical" type="range" min="-15" max="15" value="0" step="0.5"><output id="vertical-value">0%</output></label><label>Move forward <input id="forward" type="range" min="-20" max="20" value="0" step="0.5"><output id="forward-value">0%</output></label></section>
+<p class="hint">Motion is normalized to each model's central depth, not surveyed meters. Framing uses each model's intrinsics. Free orbit exposes missing surfaces.</p>
+<div id="viewport"><div id="panels"></div><div id="empty"><h2>Compare the structure.</h2><p>Run all three models on a building photo.</p></div></div>
+<footer>Assess the corner angle, window recesses, silhouette, and gaps as you move. A sharper source view alone does not imply better 3D geometry.</footer></main>
+<script type="module" src="/main.js"></script></body></html>
