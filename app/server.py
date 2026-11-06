@@ -57,7 +57,8 @@ def run_job(path):
         env['TORCH_HOME'] = str(DATA / 'models')
         env['PYTHONUNBUFFERED'] = '1'
         model = read_job(path).get('model', 'sharp')
-        worker = 'app.worker' if model == 'sharp' else 'app.alternative_worker'
+        worker = ('app.multiview_worker' if read_job(path).get('mode') == 'multiview'
+                  else 'app.worker' if model == 'sharp' else 'app.alternative_worker')
         with (path / 'run.log').open('w') as log:
             result = subprocess.run([str(python_for(model)), '-m', worker, str(path)],
                                     cwd=ROOT, env=env, stdout=log, stderr=log, timeout=1800)
@@ -167,6 +168,8 @@ async def create_job(request: Request):
 def compare_existing(job_id: str, request: Request):
     selected, focal = parse_settings(request)
     path = folder(job_id)
+    if read_job(path).get('mode') == 'multiview':
+        raise HTTPException(400, 'Use the multi-view page to reconstruct an image set')
     source = path / read_job(path)['input']
     return enqueue(source.read_bytes(), source.suffix, selected, focal)
 
@@ -177,10 +180,15 @@ def job(job_id: str):
 @app.get('/api/jobs/{job_id}/{asset}')
 def asset(job_id: str, asset: str):
     path = folder(job_id)
-    allowed = {'scene.ply', 'scene.json', 'run.log', read_job(path)['input']}
+    state = read_job(path)
+    allowed = {'scene.ply', 'scene.json', 'run.log', 'cameras.json', state['input']}
+    allowed.update(v['file'] for v in state.get('views', []))
     if asset not in allowed or not (path / asset).is_file():
         raise HTTPException(404, 'Asset not available')
     return FileResponse(path / asset)
+
+from app.multiview_api import router as multiview_router
+app.include_router(multiview_router)
 
 app.mount('/deps', StaticFiles(directory=ROOT / 'node_modules', check_dir=False), name='deps')
 app.mount('/', StaticFiles(directory=ROOT / 'web', html=True), name='web')

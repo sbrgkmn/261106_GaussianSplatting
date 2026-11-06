@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Multi-view Architecture Splat Studio</title><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/multiview.css">
+<script type="importmap">{"imports":{"three":"/deps/three/build/three.module.js","three/addons/":"/deps/three/examples/jsm/","@sparkjsdev/spark":"/deps/@sparkjsdev/spark/dist/spark.module.js"}}</script></head>
+<body><aside><div class="brand">A / S <span>MULTI-VIEW STUDIO</span></div><p><a href="/">← Single-view comparison</a></p>
+<h1>More views.<br>One structure.</h1><p class="intro">Reconstruct one scene jointly from overlapping photographs. ZipSplat estimates the geometry and each camera together.</p>
+<div id="hardware" class="badge">Checking GPU...</div>
+<form id="upload"><label class="drop">PHOTOGRAPHS OF ONE SCENE<input id="files" type="file" multiple accept="image/jpeg,image/png,image/webp"><small>2–16 photos · 25 MB each · 200 MB total</small></label>
+<div id="selection" class="note">Select overlapping views in capture order. The first becomes the initial camera.</div><div id="thumbnails"></div>
+<p class="note">Move around the structure, keep neighboring views overlapping, and avoid blur or changing zoom. Start with 5–8 photos. Unseen surfaces and metric dimensions remain uncertain.</p>
+<div class="badge">ZipSplat 504 · feed-forward</div><p class="note">Camera and scene refinement (TokenBA) is not enabled in this build.</p>
+<button id="generate" type="submit">Reconstruct image set</button></form>
+<p id="status" role="status">Ready for photographs.</p><h2>Multi-view reconstructions</h2><div id="jobs"></div>
+</aside><main><header><span>MULTI-VIEW RECONSTRUCTION</span><span id="summary">One jointly estimated scene</span></header>
+<section class="toolbar"><button id="reset">First camera</button><label>Capture camera <select id="camera" disabled><option>No scene loaded</option></select></label><label><input id="frusta" type="checkbox" checked> Show cameras</label><label>Background <input type="color" id="background" value="#11191b"></label></section>
+<p class="hint">Drag to orbit · right-drag to pan · scroll to zoom. Select a capture camera to inspect its original framing. Scale is not surveyed.</p>
+<div id="viewport"><div id="empty"><h2>Explore beyond one photograph.</h2><p>Upload an overlapping image set to begin.</p></div><img id="reference" hidden alt="Photograph for selected capture camera"></div>
+<footer><div id="metrics">PLY and estimated camera exports will appear here.</div><div id="downloads"></div></footer>
+</main><script type="module" src="/multiview.js"></script></body></html>

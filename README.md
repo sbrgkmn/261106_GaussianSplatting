@@ -2,6 +2,8 @@
 
 Local photo-to-Gaussian reconstruction with **SHARP, InfiniSplat RGB, and ZipSplat 504**. Upload once, run selected models, compare synchronized views, and download each PLY. Processing and browser assets stay local.
 
+**Multi-view implementation:** open http://127.0.0.1:8000/multiview.html to reconstruct 2–16 overlapping photographs jointly with ZipSplat, inspect each predicted camera, and export the scene and camera poses. See [multi-view setup, limitations, and measured validation](docs/multiview.md). The original single-view snapshot is preserved at the `single-view-v1` tag.
+
 ## Start
 
 ```powershell
@@ -38,7 +40,7 @@ Requirements: Windows, Python 3.12, uv, Git, Node/npm, NVIDIA driver compatible 
 
 These are renderable splats, not CAD/BIM, watertight meshes, or surveyed models. A single photo cannot establish the true back facade, room layout, or occluded window geometry. Models can disagree about depth even when their source views look similar. Compare corners, recesses, silhouettes, and disocclusion artifacts, not just source-view sharpness.
 
-For stronger architectural preservation over large camera motion, the next step is **real overlapping photographs of the same building**, then multi-view ZipSplat or COLMAP + Nerfstudio Splatfacto. This UI currently takes one photograph; it does not synthesize evidence by pretending generated views are real captures.
+For stronger architectural preservation over large camera motion, use **real overlapping photographs of the same building** in the new multi-view page. The original comparison page still takes one photograph. Multi-view currently uses feed-forward ZipSplat; COLMAP/Splatfacto, PGSR, and 2DGS are not integrated yet.
 
 The Instagram reel was not accessible, so its capture method and effects have not been identified or reproduced.
 
@@ -55,6 +57,7 @@ The Instagram reel was not accessible, so its capture method and effects have no
 ```powershell
 ./.venv/Scripts/python.exe -m pytest tests -q
 node tests/projection.test.mjs
+node tests/multiview-camera.test.mjs
 ```
 
 `app/server.py` owns persistent jobs and a bounded queue. `app/worker.py` wraps SHARP; `app/alternative_worker.py` wraps the alternatives. `app/scene_metadata.py` computes source-camera information. `web/projection.mjs` handles calibrated projection and letterboxing. `data/jobs` and `data/models` are ignored by Git.

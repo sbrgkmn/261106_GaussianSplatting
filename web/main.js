@@ -77,7 +77,7 @@ renderer.setAnimationLoop(t=>{
 async function refresh(){
  if(pollBusy)return;pollBusy=true;
  try{
-  lastList=await request('/api/jobs');const groups=new Map();
+  lastList=(await request('/api/jobs')).filter(j=>j.mode!=='multiview');const groups=new Map();
   for(const j of lastList){const id=j.comparison||j.id;if(!groups.has(id))groups.set(id,[]);groups.get(id).push(j);}
   const fragment=document.createDocumentFragment();
   for(const group of [...groups.values()].slice(0,12)){
