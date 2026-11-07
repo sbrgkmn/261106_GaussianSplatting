@@ -64,6 +64,7 @@ async function display(job){
   $('empty').style.display='none';selectCamera(0);loadedId=job.id;
   $('metrics').textContent=meta.view_count+' views · '+meta.count.toLocaleString()+' splats · '+job.seconds+'s total · '+meta.peak_vram_gb+' GiB peak · feed-forward, no refinement';
   $('downloads').replaceChildren();for(const [file,label] of [['scene.ply','Download PLY'],['cameras.json','Camera poses'],['scene.json','Metrics'],['run.log','Run log']])addLink(file,label);
+  const drawing=document.createElement('a');drawing.href='/drawing.html?job='+job.id;drawing.textContent='Draw this scene';$('downloads').append(drawing);
   status('Scene ready. Switch capture cameras and orbit to inspect structural consistency.');
  }catch(e){if(candidate){scene.remove(candidate);candidate.dispose();if(mesh===candidate)mesh=null;}status('Viewer error: '+e.message);}
  finally{if(version===loadVersion)loadingId=null;}

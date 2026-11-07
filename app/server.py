@@ -86,6 +86,9 @@ app = FastAPI(title='Architecture Splat Studio', lifespan=lifespan)
 async def local_requests(request: Request, call_next):
     # Reject cross-origin uploads, including browser requests from remote sites.
     origin = request.headers.get('origin')
+    if request.method == 'POST' and (DATA / 'reconstruction.lock').exists():
+        from fastapi.responses import JSONResponse
+        return JSONResponse({'detail': 'Photogrammetry is using the GPU. Wait for it to finish.'}, status_code=409)
     if request.method == 'POST' and origin and origin != str(request.base_url).rstrip('/'):
         from fastapi.responses import JSONResponse
         return JSONResponse({'detail': 'Cross-origin uploads are disabled'}, status_code=403)
@@ -189,6 +192,8 @@ def asset(job_id: str, asset: str):
 
 from app.multiview_api import router as multiview_router
 app.include_router(multiview_router)
+from app.library_api import router as library_router
+app.include_router(library_router)
 
 app.mount('/deps', StaticFiles(directory=ROOT / 'node_modules', check_dir=False), name='deps')
 app.mount('/', StaticFiles(directory=ROOT / 'web', html=True), name='web')

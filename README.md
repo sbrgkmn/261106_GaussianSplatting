@@ -4,6 +4,16 @@ Local photo-to-Gaussian reconstruction with **SHARP, InfiniSplat RGB, and ZipSpl
 
 **Multi-view implementation:** open http://127.0.0.1:8000/multiview.html to reconstruct 2–16 overlapping photographs jointly with ZipSplat, inspect each predicted camera, and export the scene and camera poses. See [multi-view setup, limitations, and measured validation](docs/multiview.md). The original single-view snapshot is preserved at the `single-view-v1` tag.
 
+## Spatial wireframe atelier
+
+Open [Atelier](http://127.0.0.1:8000/drawing.html) to explore Gaussian captures as a persistent 3D wireframe, points, or the original capture. Manual and automatic orbit stay interactive; line color, weight, extension, opacity, and reveal update on the GPU. Connection settings rebuild in a background worker. Audio response and PNG/SVG/composition exports are included.
+
+![Atelier interface showing Mont Saint Michel as a spatial wireframe](docs/images/atelier-wireframe.png)
+
+*Interface preview: Mont Saint Michel capture by [Harry Chen / Spirula Studio](https://superspl.at/scene/ed448729), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), shown as a sampled, stylized wireframe. The image is a project screenshot; capture assets are not included in the repository.*
+
+Open a local splat file on a fresh checkout; the curated scene library is local data. See [Atelier setup, sources, and limitations](docs/atelier.md). Connections represent nearby capture points, not measured architectural edges.
+
 ## Start
 
 ```powershell
@@ -42,7 +52,7 @@ These are renderable splats, not CAD/BIM, watertight meshes, or surveyed models.
 
 For stronger architectural preservation over large camera motion, use **real overlapping photographs of the same building** in the new multi-view page. The original comparison page still takes one photograph. Multi-view currently uses feed-forward ZipSplat; COLMAP/Splatfacto, PGSR, and 2DGS are not integrated yet.
 
-The Instagram reel was not accessible, so its capture method and effects have not been identified or reproduced.
+The new [Atelier](http://127.0.0.1:8000/drawing.html) adds layered splats, stipples, a proximity graph, progressive drawing, audio response, and PNG/SVG/composition exports. The [capture workflow](http://127.0.0.1:8000/capture.html) uses Spirula camera alignment and per-scene training. See [implementation and source notes](docs/atelier.md). This is an independent interpretation of the reference, not its original software or a measured wireframe.
 
 ## Licensing and research
 
